@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinylAudio — Best Vinyl Record Deals on Amazon</title>
+  <meta name="description" content="Hand-picked vinyl record deals on Amazon. New arrivals, deep discounts, and classics — updated regularly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────── */
+    :root {
+      --bg:        #0e0c0a;
+      --surface:   #181410;
+      --card:      #1e1a16;
+      --border:    #2e2820;
+      --amber:     #d4933a;
+      --amber-lt:  #f0b55a;
+      --cream:     #f0e8d8;
+      --muted:     #7a6e60;
+      --red:       #c04040;
+      --green:     #4a8c5c;
+      --radius:    10px;
+      --font-disp: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    /* ─── RESET ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── GRAIN OVERLAY ──────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ─── HEADER ──────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(14,12,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-disp);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      border: 2.5px solid var(--amber);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      position: relative;
+    }
+    .logo-icon::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--amber);
+      border-radius: 50%;
+    }
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border: 1px solid rgba(212,147,58,0.35);
+      border-radius: 50%;
+    }
+    .logo span { color: var(--amber); }
+    nav { display: flex; gap: 1.5rem; align-items: center; }
+    nav a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--cream); }
+    .nav-badge {
+      background: var(--amber);
+      color: var(--bg);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ─── HERO ────────────────────────────────────── */
+    .hero {
+      padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem);
+      max-width: 1300px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--amber);
+    }
+    h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+      margin-bottom: 1.2rem;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--amber);
+    }
+    .hero-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .hero-record {
+      width: clamp(120px, 14vw, 180px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%,
+        #2a2420 0%, #1a1410 30%, #0e0c0a 50%, #1e1a14 55%,
+        #141210 65%, #1a1614 80%, #0e0c0a 100%);
+      box-shadow: 0 0 60px rgba(212,147,58,0.15), 0 20px 60px rgba(0,0,0,0.6);
+      position: relative;
+      animation: spin 18s linear infinite;
+      flex-shrink: 0;
+    }
+    .hero-record::before {
+      content: '';
+      position: absolute; inset: 30%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #8B4513 0%, #5a2d0c 40%, #3d1f08 100%);
+      box-shadow: 0 0 20px rgba(139,69,19,0.4);
+    }
+    .hero-record::after {
+      content: '';
+      position: absolute;
+      inset: 47%; border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── FILTER BAR ──────────────────────────────── */
+    .filter-wrap {
+      max-width: 1300px; margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 3rem) 2rem;
+    }
+    .filter-bar {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .filter-btn:hover { border-color: var(--amber); color: var(--cream); }
+    .filter-btn.active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: var(--bg);
+      font-weight: 500;
+    }
+
+    /* ─── DEAL GRID ───────────────────────────────── */
+    .deals-section {
+      max-width: 1300px; margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
+    }
+    .section-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-family: var(--font-disp);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .deal-count {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .deals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ─── DEAL CARD ───────────────────────────────── */
+    .deal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      animation: fadeUp 0.4s ease both;
+    }
+    .deal-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212,147,58,0.4);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,147,58,0.15);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .deal-card:nth-child(1)  { animation-delay: 0.05s; }
+    .deal-card:nth-child(2)  { animation-delay: 0.10s; }
+    .deal-card:nth-child(3)  { animation-delay: 0.15s; }
+    .deal-card:nth-child(4)  { animation-delay: 0.20s; }
+    .deal-card:nth-child(5)  { animation-delay: 0.25s; }
+    .deal-card:nth-child(6)  { animation-delay: 0.30s; }
+    .deal-card:nth-child(7)  { animation-delay: 0.35s; }
+    .deal-card:nth-child(8)  { animation-delay: 0.40s; }
+
+    .card-cover {
+      width: 100%; aspect-ratio: 1;
+      position: relative; overflow: hidden;
+      background: var(--surface);
+    }
+    .card-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .deal-card:hover .card-cover img { transform: scale(1.04); }
+
+    .badge-discount {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--red);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .badge-new {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--green);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .badge-hot {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--amber);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .card-genre {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(14,12,10,0.75);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    .card-body {
+      padding: 1rem;
+      display: flex; flex-direction: column; gap: 4px;
+      flex: 1;
+    }
+    .card-artist {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .card-title {
+      font-family: var(--font-disp);
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--cream);
+    }
+    .card-format {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .card-pricing {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-top: auto; padding-top: 0.75rem;
+    }
+    .price-now {
+      font-family: var(--font-disp);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--amber-lt);
+    }
+    .price-was {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+    .card-cta {
+      display: block;
+      margin: 0.75rem 1rem 1rem;
+      padding: 10px;
+      background: var(--amber);
+      color: var(--bg);
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .card-cta:hover {
+      background: var(--amber-lt);
+      transform: scale(1.02);
+    }
+    .card-cta::after { content: ' →'; }
+
+    /* ─── HIDDEN CARD (filter) ────────────────────── */
+    .deal-card.hidden { display: none; }
+
+    /* ─── BANNER ──────────────────────────────────── */
+    .banner {
+      max-width: 1300px; margin: 0 auto 3rem;
+      padding: 0 clamp(1rem, 4vw, 3rem);
+    }
+    .banner-inner {
+      background: linear-gradient(135deg, #1e1a10 0%, #2a2010 100%);
+      border: 1px solid rgba(212,147,58,0.3);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      display: flex; align-items: center; gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .banner-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .banner-text h2 {
+      font-family: var(--font-disp);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .banner-text p { color: var(--muted); font-size: 0.85rem; }
+    .banner-text a { color: var(--amber); }
+
+    /* ─── FOOTER ──────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem clamp(1rem, 4vw, 3rem);
+      max-width: 1300px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--font-disp);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-links {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-disclaimer {
+      width: 100%;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.6;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ─── RECORD LABEL (cover placeholder) ───────── */
+    .cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-placeholder .vinyl-bg {
+      position: absolute; inset: 0;
+      border-radius: 0;
+    }
+    .cover-placeholder .vinyl-label {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 1rem;
+    }
+    .cover-placeholder .vinyl-label .lbl-artist {
+      font-family: var(--font-disp);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .cover-placeholder .vinyl-label .lbl-title {
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: 0.7rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-record { display: none; }
+      nav { gap: 0.75rem; }
+      nav a { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon"></div>
+      Vinyl<span>Audio</span>
+    </div>
+    <nav>
+      <a href="#deals">Deals</a>
+      <a href="#about">About</a>
+      <a href="https://www.amazon.com/s?k=vinyl+records&tag=YOUR-TAG-HERE" target="_blank" rel="noopener" class="nav-badge">Shop Amazon</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div>
+      <p class="hero-eyebrow">Hand-picked deals, updated regularly</p>
+      <h1>The best <em>vinyl</em><br>deals on Amazon</h1>
+      <p class="hero-sub">Classics, new pressings, and limited editions — all at the lowest prices we've found. Every link supports us at no extra cost to you.</p>
+    </div>
+    <div class="hero-record"></div>
+  </section>
+
+  <!-- FILTERS -->
+  <div class="filter-wrap">
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-genre="all">All</button>
+      <button class="filter-btn" data-genre="Rock">Rock</button>
+      <button class="filter-btn" data-genre="Jazz">Jazz</button>
+      <button class="filter-btn" data-genre="Classical">Classical</button>
+      <button class="filter-btn" data-genre="Hip-Hop">Hip-Hop</button>
+      <button class="filter-btn" data-genre="Electronic">Electronic</button>
+      <button class="filter-btn" data-genre="Pop">Pop</button>
+      <button class="filter-btn" data-genre="Blues">Blues</button>
+      <button class="filter-btn" data-genre="Soul">Soul</button>
+    </div>
+  </div>
+
+  <!-- DEALS GRID -->
+  <section class="deals-section" id="deals">
+    <div class="section-header">
+      <h2 class="section-title">Today's Deals</h2>
+      <span class="deal-count" id="dealCount"></span>
+    </div>
+    <div class="deals-grid" id="dealsGrid"></div>
+  </section>
+
+  <!-- AFFILIATE BANNER -->
+  <div class="banner" id="about">
+    <div class="banner-inner">
+      <div class="banner-icon">🎵</div>
+      <div class="banner-text">
+        <h2>How VinylAudio works</h2>
+        <p>We curate the best vinyl deals from Amazon and update them regularly. When you buy through our links, Amazon pays us a small commission — at <strong>no extra cost to you</strong>. It keeps the site running. <a href="https://affiliate-program.amazon.com" target="_blank" rel="noopener">VinylAudio.com is a participant in the Amazon Associates program.</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Vinyl<span>Audio</span>.com</div>
+    <div class="footer-links">
+      <a href="#top">Home</a>
+      <a href="#deals">Deals</a>
+      <a href="mailto:hello@vinylaudio.com">Contact</a>
+    </div>
+    <p class="footer-disclaimer">
+      VinylAudio.com is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com. Amazon and the Amazon logo are trademarks of Amazon.com, Inc., or its affiliates. Prices and availability are accurate as of the date/time indicated and are subject to change.
+    </p>
+  </footer>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────
+    //  ★  YOUR AMAZON ASSOCIATES TRACKING ID
+    //     Replace "YOUR-TAG-HERE" with your actual tag, e.g. "vinylaudio-20"
+    // ─────────────────────────────────────────────────────────────
+    const AMAZON_TAG = "YOUR-TAG-HERE";
+
+    // ─────────────────────────────────────────────────────────────
+    //  DEALS DATA
+    //  To add / edit a deal, just add/change an object in this array.
+    //
+    //  Fields:
+    //   artist    — Artist name
+    //   title     — Album title
+    //   genre     — Must match a filter button: Rock, Jazz, Classical,
+    //               Hip-Hop, Electronic, Pop, Blues, Soul
+    //   format    — e.g. "180g Vinyl LP", "2xLP Gatefold", etc.
+    //   asin      — Amazon product ASIN (10-char code in the Amazon URL)
+    //   image     — Amazon image URL OR any image URL OR leave ""
+    //   priceSale — Current sale price as a string, e.g. "$18.99"
+    //   priceWas  — Original price, e.g. "$34.99" (leave "" to hide)
+    //   discount  — e.g. "45% OFF" (leave "" to hide)
+    //   badge     — "hot" | "new" | "" 
+    // ─────────────────────────────────────────────────────────────
+    const deals = [
+      {
+        artist:    "Pink Floyd",
+        title:     "The Dark Side of the Moon",
+        genre:     "Rock",
+        format:    "180g Vinyl LP — 50th Anniversary",
+        asin:      "B0BW17GPN7",
+        image:     "https://m.media-amazon.com/images/I/71vDyBFqMEL._SL500_.jpg",
+        priceSale: "$24.99",
+        priceWas:  "$39.99",
+        discount:  "38% OFF",
+        badge:     "hot"
+      },
+      {
+        artist:    "Miles Davis",
+        title:     "Kind of Blue",
+        genre:     "Jazz",
+        format:    "180g Vinyl LP",
+        asin:      "B000002ADT",
+        image:     "https://m.media-amazon.com/images/I/71K8xGLLwOL._SL500_.jpg",
+        priceSale: "$19.99",
+        priceWas:  "$32.99",
+        discount:  "39% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "Kendrick Lamar",
+        title:     "To Pimp a Butterfly",
+        genre:     "Hip-Hop",
+        format:    "2xLP Gatefold",
+        asin:      "B00WHWKZQ2",
+        image:     "https://m.media-amazon.com/images/I/71aBaMdSVQL._SL500_.jpg",
+        priceSale: "$29.99",
+        priceWas:  "$49.99",
+        discount:  "40% OFF",
+        badge:     "hot"
+      },
+      {
+        artist:    "Daft Punk",
+        title:     "Random Access Memories",
+        genre:     "Electronic",
+        format:    "2xLP — 10th Anniversary",
+        asin:      "B0BNH5SXRY",
+        image:     "https://m.media-amazon.com/images/I/71LonkXD2ZL._SL500_.jpg",
+        priceSale: "$34.99",
+        priceWas:  "$54.99",
+        discount:  "36% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "Fleetwood Mac",
+        title:     "Rumours",
+        genre:     "Rock",
+        format:    "180g Vinyl LP",
+        asin:      "B000002ITU",
+        image:     "https://m.media-amazon.com/images/I/61JIKhgWEVL._SL500_.jpg",
+        priceSale: "$18.99",
+        priceWas:  "$29.99",
+        discount:  "37% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "John Coltrane",
+        title:     "A Love Supreme",
+        genre:     "Jazz",
+        format:    "180g Vinyl LP — Deluxe Edition",
+        asin:      "B0002CZUQO",
+        image:     "https://m.media-amazon.com/images/I/71PFG4lc+KL._SL500_.jpg",
+        priceSale: "$22.99",
+        priceWas:  "$34.99",
+        discount:  "34% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "Billie Eilish",
+        title:     "Hit Me Hard and Soft",
+        genre:     "Pop",
+        format:    "LP — Exclusive Color Vinyl",
+        asin:      "B0D1LGJRQ5",
+        image:     "https://m.media-amazon.com/images/I/61oeaqblIdL._SL500_.jpg",
+        priceSale: "$21.99",
+        priceWas:  "$27.99",
+        discount:  "21% OFF",
+        badge:     "new"
+      },
+      {
+        artist:    "Beethoven / Karajan",
+        title:     "Symphony No. 9",
+        genre:     "Classical",
+        format:    "2xLP 180g Audiophile",
+        asin:      "B000003CXH",
+        image:     "https://m.media-amazon.com/images/I/71kC5tOQHXL._SL500_.jpg",
+        priceSale: "$27.99",
+        priceWas:  "$44.99",
+        discount:  "38% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "B.B. King",
+        title:     "Live at the Regal",
+        genre:     "Blues",
+        format:    "180g Vinyl LP",
+        asin:      "B000000WN1",
+        image:     "https://m.media-amazon.com/images/I/71v8OasHaeL._SL500_.jpg",
+        priceSale: "$16.99",
+        priceWas:  "$25.99",
+        discount:  "35% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "Marvin Gaye",
+        title:     "What's Going On",
+        genre:     "Soul",
+        format:    "180g Vinyl LP",
+        asin:      "B000002J0E",
+        image:     "https://m.media-amazon.com/images/I/71pMKmxJLnL._SL500_.jpg",
+        priceSale: "$17.99",
+        priceWas:  "$28.99",
+        discount:  "38% OFF",
+        badge:     "hot"
+      },
+      {
+        artist:    "Radiohead",
+        title:     "OK Computer",
+        genre:     "Rock",
+        format:    "2xLP 180g",
+        asin:      "B000003TA4",
+        image:     "https://m.media-amazon.com/images/I/61F0A1xCMkL._SL500_.jpg",
+        priceSale: "$26.99",
+        priceWas:  "$39.99",
+        discount:  "33% OFF",
+        badge:     ""
+      },
+      {
+        artist:    "Aphex Twin",
+        title:     "Selected Ambient Works 85–92",
+        genre:     "Electronic",
+        format:    "2xLP",
+        asin:      "B000025OUA",
+        image:     "https://m.media-amazon.com/images/I/51lJhCF-2mL._SL500_.jpg",
+        priceSale: "$23.99",
+        priceWas:  "$36.99",
+        discount:  "35% OFF",
+        badge:     ""
+      }
+    ];
+
+    // ─── BUILD AMAZON URL ──────────────────────────────────────────
+    function amazonUrl(asin) {
+      return `https://www.amazon.com/dp/${asin}?tag=${AMAZON_TAG}`;
+    }
+
+    // ─── COLOR PALETTES for placeholder covers ─────────────────────
+    const palettes = [
+      { bg: "linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)", text: "#e2b96a" },
+      { bg: "linear-gradient(135deg,#2d1b00,#5c3d11,#8b5e1a)", text: "#f0d090" },
+      { bg: "linear-gradient(135deg,#1a0a0a,#3d1515,#6b2020)", text: "#f0a0a0" },
+      { bg: "linear-gradient(135deg,#0a1a0a,#153d15,#206b20)", text: "#a0f0a0" },
+      { bg: "linear-gradient(135deg,#0a0a1a,#151538,#20206b)", text: "#a0a0f0" },
+    ];
+
+    // ─── RENDER CARDS ──────────────────────────────────────────────
+    function renderDeals(filterGenre = "all") {
+      const grid = document.getElementById("dealsGrid");
+      const countEl = document.getElementById("dealCount");
+      grid.innerHTML = "";
+
+      const filtered = filterGenre === "all"
+        ? deals
+        : deals.filter(d => d.genre === filterGenre);
+
+      countEl.textContent = `${filtered.length} deal${filtered.length !== 1 ? "s" : ""}`;
+
+      filtered.forEach((deal, i) => {
+        const pal = palettes[i % palettes.length];
+        const url = amazonUrl(deal.asin);
+
+        const card = document.createElement("div");
+        card.className = "deal-card";
+        card.style.animationDelay = `${0.05 + i * 0.05}s`;
+
+        // cover area
+        let coverHtml;
+        if (deal.image) {
+          coverHtml = `<img src="${deal.image}" alt="${deal.artist} — ${deal.title}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.cover-placeholder').style.display='flex'">
+            <div class="cover-placeholder" style="display:none;background:${pal.bg};position:absolute;inset:0;">
+              <div class="vinyl-label" style="color:${pal.text}">
+                <div class="lbl-artist">${deal.artist}</div>
+                <div class="lbl-title">${deal.title}</div>
+              </div>
+            </div>`;
+        } else {
+          coverHtml = `<div class="cover-placeholder" style="background:${pal.bg};">
+            <div class="vinyl-label" style="color:${pal.text}">
+              <div class="lbl-artist">${deal.artist}</div>
+              <div class="lbl-title">${deal.title}</div>
+            </div>
+          </div>`;
+        }
+
+        const discountBadge = deal.discount
+          ? `<span class="badge-discount">${deal.discount}</span>` : "";
+        const hotBadge = deal.badge === "hot"
+          ? `<span class="badge-hot">🔥 Hot</span>` : "";
+        const newBadge = deal.badge === "new"
+          ? `<span class="badge-new">New</span>` : "";
+        const badgeLeft = deal.badge === "new" ? newBadge : discountBadge;
+        const wasHtml = deal.priceWas
+          ? `<span class="price-was">${deal.priceWas}</span>` : "";
+
+        card.innerHTML = `
+          <a href="${url}" target="_blank" rel="noopener sponsored" class="card-cover">
+            ${coverHtml}
+            ${badgeLeft}
+            ${hotBadge}
+            <span class="card-genre">${deal.genre}</span>
+          </a>
+          <div class="card-body">
+            <span class="card-artist">${deal.artist}</span>
+            <h3 class="card-title">${deal.title}</h3>
+            <span class="card-format">${deal.format}</span>
+            <div class="card-pricing">
+              <span class="price-now">${deal.priceSale}</span>
+              ${wasHtml}
+            </div>
+          </div>
+          <a href="${url}" target="_blank" rel="noopener sponsored" class="card-cta">View on Amazon</a>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // ─── FILTER LOGIC ──────────────────────────────────────────────
+    document.getElementById("filterBar").addEventListener("click", e => {
+      if (!e.target.matches(".filter-btn")) return;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      renderDeals(e.target.dataset.genre);
+    });
+
+    // ─── INIT ──────────────────────────────────────────────────────
+    renderDeals();
+  </script>
+
+</body>
+</html>
